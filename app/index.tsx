@@ -8,7 +8,7 @@ import {
   FlatList,
   Animated,
 } from "react-native";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Svg, { Path } from "react-native-svg";
 import { Colors, height, width } from "@/constants/globalStyles";
 import { StatusBar } from "expo-status-bar";
@@ -17,11 +17,14 @@ import BoardingOne from "../assets/images/boardingOne.svg"; // Adjust the import
 import BoardingTwo from "../assets/images/boardingTwo.svg";
 import BoardingThree from "../assets/images/boardingThree.svg";
 import { Link } from "expo-router";
+import Paginator from "@/components/Paginator";
+import { useRouter } from "expo-router";
 
-const index = (props) => {
+const index = () => {
   const handlePress = () => {};
-  const slidesRef = useRef(null)
+  const slidesRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const router = useRouter();
   const obj = [
     {
       title: "Track Your Goals",
@@ -43,7 +46,11 @@ const index = (props) => {
     },
   ];
   const scrollX = useRef(new Animated.Value(0)).current;
-  const viewableItemsChanged = useRef(({ viewableItems }) => {
+  console.log("x", scrollX);
+
+  const viewableItemsChanged = useRef(({ viewableItems }: any) => {
+    console.log(viewableItems);
+
     setCurrentIndex(viewableItems[0].index);
   }).current;
 
@@ -60,6 +67,9 @@ const index = (props) => {
       </View>
     );
   };
+  useEffect(() => {
+    console.log(scrollX);
+  }, [scrollX]);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -84,14 +94,19 @@ const index = (props) => {
           }
         )}
       />
-      <Link href={"/Boarding"} asChild>
-        <TouchableOpacity style={styles.nextBtn}>
+
+      <Paginator data={obj} scrollX={scrollX} />
+      {currentIndex == 2 && (
+        <TouchableOpacity
+          style={styles.nextBtn}
+          onPress={() => router.replace("/SignUp")}
+        >
           <Image
             source={require("@/assets/images/Button.png")}
             style={{ height: 60, width: 60 }}
           />
         </TouchableOpacity>
-      </Link>
+      )}
     </SafeAreaView>
   );
 };

@@ -18,10 +18,12 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     "Poppins-Bold": require("../assets/fonts/Poppins-Bold.ttf"),
-    "Poppins-Regular":require("../assets/fonts/Poppins-Regular.ttf")
+    "Poppins-Regular": require("../assets/fonts/Poppins-Regular.ttf"),
   });
 
   useEffect(() => {
+    console.log(loaded);
+
     if (loaded) {
       SplashScreen.hideAsync();
     }
@@ -34,9 +36,9 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <Stack>
+        <Stack.Screen name="SignUp" options={{ headerShown: false }} />
         <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen name="Boarding" options={{ headerShown: false }} />
-        <Stack.Screen name="BoardingThree" options={{ headerShown: false }} />
+
         <Stack.Screen name="+not-found" />
       </Stack>
     </ThemeProvider>
